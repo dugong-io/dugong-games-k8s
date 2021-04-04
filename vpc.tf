@@ -16,21 +16,21 @@ module "vpc" {
     private_subnets = ["10.0.0.0/24", "10.0.1.0/24", "10.0.2.0/24"]
     public_subnets  = ["10.0.3.0/26", "10.0.3.64/26", "10.0.3.128/26"]
 
-     public_subnet_tags = {
+    public_subnet_tags = {
         "kubernetes.io/cluster/dugong-cluster" = "shared"
         "kubernetes.io/role/elb"                      = "1"
-     }
+    }
 
     private_subnet_tags = {
         "kubernetes.io/cluster/dugong-cluster" = "shared"
         "kubernetes.io/role/internal-elb"             = "1"
-     }
+    }
 
     # NAT Gateways
     enable_nat_gateway     = true
-    single_nat_gateway     = false
-    one_nat_gateway_per_az = false
+    #single_nat_gateway     = false
+    #one_nat_gateway_per_az = false
 
     # Internet Gateway
-    create_egress_only_igw = true
+    #create_egress_only_igw = true
 }

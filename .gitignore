@@ -1,3 +1,6 @@
+# Kubeconfig with private cert details
+kubeconfig*
+
 # Local .terraform directories
 **/.terraform/*
 
@@ -6,7 +9,7 @@
 *.tfstate.*
 
 # .terraform.lock.hcl file
-.terraform.lock.hcl
+# .terraform.lock.hcl
 
 # Crash log files
 crash.log
