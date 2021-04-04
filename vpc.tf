@@ -28,9 +28,4 @@ module "vpc" {
 
     # NAT Gateways
     enable_nat_gateway     = true
-    #single_nat_gateway     = false
-    #one_nat_gateway_per_az = false
-
-    # Internet Gateway
-    #create_egress_only_igw = true
 }
