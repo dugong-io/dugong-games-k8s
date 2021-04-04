@@ -12,7 +12,7 @@ module "ssh_security_group" {
             to_port = -1
             protocol = "icmp"
             description = "ping"
-            cidr_blocks = "81.107.87.136/32"
+            cidr_blocks = local.admin_ip.admin_ip_jon
         }
     ]
 }

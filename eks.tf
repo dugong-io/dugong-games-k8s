@@ -18,7 +18,7 @@ module "eks" {
     manage_aws_auth=false
 
     # lock down public interface to my ip address
-    cluster_endpoint_public_access_cidrs = ["81.107.87.136/32"]
+    cluster_endpoint_public_access_cidrs = [local.admin_ip.admin_ip_jon]
     cluster_endpoint_private_access = true
 
 }
