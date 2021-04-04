@@ -20,3 +20,18 @@ resource "helm_release" "kube-prometheus-stack" {
 		value = "true"
 	}
 }
+
+# Deploy a minecraft server
+resource "helm_release" "minecraft" {
+	name = "minecraft"
+	repository = "https://itzg.github.io/minecraft-server-charts"
+	chart = "minecraft"
+	namespace = "game"
+	create_namespace = true
+
+	set {
+		name = "minecraftServer.eula"
+		value = true
+		type = "auto"
+	}
+}

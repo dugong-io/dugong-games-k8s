@@ -21,3 +21,9 @@ module "eks" {
     cluster_endpoint_public_access_cidrs = [local.admin_ip.admin_ip_jon]
     cluster_endpoint_private_access = true
 }
+
+resource "aws_s3_bucket_object" "cluster_endpoint" {
+    bucket = "terraform-dugong-s3-outputs"
+    key = "cluster_endpoint"
+    content = module.eks.cluster_endpoint
+}
