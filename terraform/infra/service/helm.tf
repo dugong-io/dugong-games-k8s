@@ -12,23 +12,6 @@ data "aws_s3_bucket_object" "cluster_id" {
   key    = "cluster_id"
 }
 
-locals {
-	clusterName =  data.aws_s3_bucket_object.cluster_id.body
-}
-
-# Deploy the AWS Load Balancer Controller
-resource "helm_release" "aws-load-balancer-controller" {
-	name = "aws-load-balancer-controller"
-	repository = "https://aws.github.io/eks-charts"
-	chart = "aws-load-balancer-controller"
-	namespace = "kube-system"
-  
-	values = [<<EOF
-clusterName: data.aws_s3_bucket_object.cluster_id.body
-	EOF
-	]
-}
-
 # Deploy the kube-prometheus-stack service
 resource "helm_release" "kube-prometheus-stack" {
 	name             = "kube-prometheus-stack"

@@ -29,3 +29,10 @@ module "vpc" {
     # NAT Gateways
     enable_nat_gateway     = true
 }
+
+resource "aws_s3_bucket_object" "vpc_id" {
+    bucket = "terraform-dugong-s3-outputs"
+    key = "vpc_id"
+    content = module.vpc.vpc_id
+    content_type = "text/plain"
+}
