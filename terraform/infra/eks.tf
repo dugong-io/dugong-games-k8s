@@ -30,6 +30,3 @@ resource "aws_s3_bucket_object" "cluster_endpoint" {
     key = "cluster_endpoint"
     content = module.eks.cluster_endpoint
 }
-
-
-# Deploy the EKS intgress controller
