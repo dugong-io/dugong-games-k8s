@@ -22,6 +22,7 @@ module "eks" {
     cluster_endpoint_private_access = true
 }
 
+# Store useful information in an s3 bucket that can be used by downstream modules
 resource "aws_s3_bucket_object" "cluster_endpoint" {
     bucket = "terraform-dugong-s3-outputs"
     key = "cluster_endpoint"
