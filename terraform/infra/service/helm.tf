@@ -26,6 +26,19 @@ resource "helm_release" "kube-prometheus-stack" {
 	}
 }
 
+resource "helm_release" "nginx" {
+	name = "nginx"
+	repository = "https://charts.bitnami.com/bitnami"
+	chart = "nginx"
+	namespace = "web"
+	create_namespace = true
+
+	set {
+		name = "ingress.enabled"
+		value = true
+	}
+}
+
 # # Deploy a minecraft server
 # resource "helm_release" "minecraft" {
 # 	name = "minecraft"
