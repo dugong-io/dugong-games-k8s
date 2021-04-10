@@ -1,7 +1,7 @@
 module "eks" {
     source = "terraform-aws-modules/eks/aws"
     cluster_name = "dugong-cluster"
-    cluster_version = "1.18"
+    cluster_version = "1.19"
     subnets = module.vpc.private_subnets
     vpc_id = module.vpc.vpc_id
 
@@ -52,4 +52,55 @@ resource "aws_s3_bucket_object" "oidc_provider_arn" {
     bucket = "terraform-dugong-s3-outputs"
     key = "oidc_provider_arn"
     content = module.eks.oidc_provider_arn
+}
+
+# get official iam policy for aws alb ingress controller
+# Note: change the version to the desire version
+data "http" "worker_policy" {
+    url = "https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.8/docs/examples/iam-policy.json"
+
+    request_headers = {
+        Accept = "application/json"
+    }
+}
+
+# and attach it
+resource "aws_iam_role_policy" "worker_policy" {
+  name   = "worker_policy"
+  role   = module.eks.worker_iam_role_name
+  policy = data.http.worker_policy.body
+}
+
+# install EBS Controller
+
+data "aws_eks_cluster" "name" {
+  name = module.eks.cluster_id
+}
+
+data "aws_eks_cluster_auth" "name" {
+  name = module.eks.cluster_id
+}
+
+data "tls_certificate" "cert" {
+  url = data.aws_eks_cluster.name.identity[0].oidc[0].issuer
+}
+
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.name.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.name.certificate_authority.0.data)
+  token                  = data.aws_eks_cluster_auth.name.token
+  load_config_file       = false
+  version                = "~> 1.11.4"
+}
+
+module "ebs_csi_driver_controller" {
+    depends_on = [
+      module.eks
+    ]
+  source = "DrFaust92/ebs-csi-driver/kubernetes"
+  version = "2.4.0"
+
+  ebs_csi_controller_role_name               = "ebs-csi-driver-controller"
+  ebs_csi_controller_role_policy_name_prefix = "ebs-csi-driver-policy"
+  oidc_url                                   = module.eks.cluster_oidc_issuer_url
 }

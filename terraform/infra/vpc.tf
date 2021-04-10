@@ -18,21 +18,22 @@ module "vpc" {
 
     public_subnet_tags = {
         "kubernetes.io/cluster/dugong-cluster" = "shared"
-        "kubernetes.io/role/elb"                      = "1"
+        "kubernetes.io/role/elb"               = "1"
+        "kubernetes.io/role/alb-ingress"       = "1"
     }
 
     private_subnet_tags = {
         "kubernetes.io/cluster/dugong-cluster" = "shared"
-        "kubernetes.io/role/internal-elb"             = "1"
+        "kubernetes.io/role/internal-elb"      = "1"
     }
 
     # NAT Gateways
-    enable_nat_gateway     = true
+    enable_nat_gateway = true
 }
 
 resource "aws_s3_bucket_object" "vpc_id" {
-    bucket = "terraform-dugong-s3-outputs"
-    key = "vpc_id"
-    content = module.vpc.vpc_id
+    bucket       = "terraform-dugong-s3-outputs"
+    key          = "vpc_id"
+    content      = module.vpc.vpc_id
     content_type = "text/plain"
 }
