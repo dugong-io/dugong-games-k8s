@@ -1,17 +1,29 @@
 module "eks" {
-    source = "terraform-aws-modules/eks/aws"
-    cluster_name = "dugong-cluster"
+    source          = "terraform-aws-modules/eks/aws"
+    cluster_name    = "dugong-cluster"
     cluster_version = "1.19"
-    subnets = module.vpc.private_subnets
-    vpc_id = module.vpc.vpc_id
+    vpc_id          = module.vpc.vpc_id
+    subnets         = module.vpc.private_subnets
 
     # Define the worker nodes
     node_groups = {
-        base = {
+        private    = {
             desired_capacity = 1
-            max_capacity = 3
-            min_capacity = 1
-            instance_types = ["t3.medium",]
+            max_capacity     = 3
+            min_capacity     = 1
+            instance_types   = ["t3.medium",]
+            capacity_type    = "SPOT"
+            subnets          = module.vpc.private_subnets
+            k8s_labels       = map("subnet", "private")
+        }
+        public    = {
+            desired_capacity = 1
+            max_capacity     = 3
+            min_capacity     = 1
+            instance_types   = ["t3.medium",]
+            capacity_type    = "SPOT"
+            subnets          = module.vpc.public_subnets
+            k8s_labels       = map("subnet", "public")
         }
     }
 
