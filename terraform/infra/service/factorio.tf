@@ -31,4 +31,10 @@ resource "helm_release" "factorio" {
         value = "30000"
         type = "string"
     }
+
+    set {
+        name = "nodeSelector.subnet"
+        value = "public"
+        type = "string"
+    }
 }
