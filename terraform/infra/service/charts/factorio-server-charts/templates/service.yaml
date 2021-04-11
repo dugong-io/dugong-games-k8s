@@ -4,6 +4,7 @@ metadata:
   name: {{ template "factorio-server-charts.fullname" . }}
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-type: nlb-ip
+    service.beta.kubernetes.io/aws-load-balancer-internal: "true"
   labels:
     app: {{ template "factorio-server-charts.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
