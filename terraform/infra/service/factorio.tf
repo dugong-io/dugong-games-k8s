@@ -1,7 +1,7 @@
 resource "helm_release" "factorio" {
-    # depends_on = [
-    #   helm_release.aws-load-balancer-controller
-    # ]
+    depends_on = [
+      helm_release.aws-load-balancer-controller
+    ]
     name = "factorio"
     repository = "./charts/"
     chart = "factorio-server-charts"
@@ -22,7 +22,7 @@ resource "helm_release" "factorio" {
 
     set {
         name = "service.type"
-        value = "NodePort"
+        value = "LoadBalancer"
         type = "string"
     }
 
@@ -34,7 +34,7 @@ resource "helm_release" "factorio" {
 
     set {
         name = "nodeSelector.subnet"
-        value = "public"
+        value = "private"
         type = "string"
     }
 }
